@@ -1,0 +1,88 @@
+{% extends "admin/dashboard.html" %} {% block managetype %}
+<h1 class="page-header">用户管理</h1>
+<div class="table-responsive">
+    <table class="table table-striped" id="table">
+        <thead>
+            <tr>
+                <th>uid</th>
+                <th>用户名</th>
+                <th>邮箱</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for muser in users if muser.role != 'admin' %}
+            <tr>
+                <td>{{muser.id}}</td>
+                <td>{{muser.name}}</td>
+                <td>{{muser.email}}</td>
+                {% if muser.role == 'user' %}
+                <td>普通用户</td>
+                <td><a class="label label-danger delete" id="{{muser.id}}">禁言</a></td>
+                {% else %}
+                <td>已禁言</td>
+                <td><a class="label label-warning recover" id="{{muser.id}}">恢复</a></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable();
+        });
+        function ui_del(btn) {
+            if (btn.text() == '恢复') {
+                btn.parent().prev().text('正常');
+                btn.text('禁言');
+                btn.removeClass('label-warning recover');
+                btn.addClass('label-danger delete');
+            } else {
+                btn.parent().prev().text('已禁言');
+                btn.text('恢复');
+                btn.removeClass('label-danger delete');
+                btn.addClass('label-warning recover');
+            }
+        }
+
+        function ajax_del(url, btn) {
+            $.ajax({
+                url: url,
+                data: { 'id': btn.attr('id') },
+                type: 'POST',
+                dataType: 'json',
+                success: function (res) {
+                    if (res.success == undefined) {
+                        alert(res.error);
+                    }
+                    else {
+                        ui_del(btn);
+                    }
+                },
+                error: function (error) {
+                    alert('server error');
+                }
+            });
+        }
+
+        function init_btn(url) {
+            // 初始化刪除按钮
+            $('#table tr').on('click', 'a.delete', function (e) {
+                e.preventDefault();
+                if (confirm('确定要禁言该用户?')) {
+                    ajax_del(url, $(this));
+                }
+            });
+            $('#table tr').on('click', 'a.recover', function (e) {
+                e.preventDefault();
+                if (confirm('确定要恢复该用户?')) {
+                    ajax_del(url, $(this));
+                }
+            });
+        }
+        init_btn('/user/mute');
+    </script>
+</div>
+{% endblock %}

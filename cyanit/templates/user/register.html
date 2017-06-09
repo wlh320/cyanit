@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}
+    <title>新用户注册</title>
+{% endblock %}
+{% block content %}
+<div class="col-md-8">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">欢迎加入cyanit社区</h3>
+        </div>
+        <div class="panel-body">    
+        <div id="response"></div>
+            <form accept-charset="UTF-8" class="form-horizontal" id="new_user" method="post">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="username">用户名</label>
+                    <div class="col-sm-5">
+                    <input class="form-control" id="user_name" name="username" type="text" value="" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="user_email">电子邮件</label>
+                    <div class="col-sm-5">
+                    <input class="form-control" id="user_email" name="email" size="50" type="email" value="" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="user_password">密码</label>
+                    <div class="col-sm-5">
+                    <input class="form-control" id="user_password" name="password" type="password" value="" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="user_password_confirmation">密码确认</label>
+                    <div class="col-sm-5">
+                    <input class="form-control" id="user_password_confirmation" name="password_confirm" type="password" value="" />
+                    </div>
+                </div>
+                <div class='form-group'>
+                    <div class="col-sm-offset-2 col-sm-9">
+                        <button type="submit" id="register" class="btn btn-primary">注册</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+$(function() {
+    $('form').on("submit", function() {
+        $.ajax({
+            url: '/register',
+            data: $('form').serialize(),
+            type: 'POST',
+            dataType: 'json',
+            success: function(res) {
+                $('#response').attr("class","");
+                $('#response').empty();
+                if (res.success == undefined) {
+                    $('#response').addClass('alert alert-danger');
+                    $('.alert').text(res.error)
+                }
+                else {
+                    $('#response').addClass('alert alert-success');
+                    $('.alert').append("注册成功 <a href=\"/index\">点我返回主页</a>");
+                }
+
+            },
+            error: function(error) {
+                $('#response').attr("class","");
+                $('#response').empty();
+                $('#response').addClass('alert alert-danger');
+                $('.alert').text(error.statusText);
+            }
+        });
+        return false;
+    });
+});
+</script>
+{% endblock %}
+

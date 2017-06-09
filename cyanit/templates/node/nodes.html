@@ -1,0 +1,13 @@
+{% for node in nodes if not node.deleted %}
+<!-- 一个子节点 -->
+<li class="media topic-list">
+    <!-- 内容 -->
+    <div class="media-body">
+        <h3 class="media-heading topic-list-heading"><a href="/node/{{ node.name }}">{{node.name}}</a></h3>
+        <p class="text-muted">
+            {{node.desc}}
+        </p>
+    </div>
+</li>
+<!-- end一个子节点 -->
+{% endfor %}

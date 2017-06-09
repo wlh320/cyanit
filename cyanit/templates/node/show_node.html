@@ -1,0 +1,25 @@
+<!--所有节点显示-->
+{% extends "base.html" %}
+{% block title %}
+<title>所有板块</title>
+{% endblock %}
+{% block content %}
+<div class="col-md-8">
+	<div class="panel">
+		<div class="panel-heading">所有板块</div>
+		<div class="panel-body">
+			<ul class="media-list">
+                <!--显示节点列表-->
+				{% include "node/nodes.html" %}
+			</ul>
+		</div>
+		<div class="panel-footer">Powered by cyanit</div>
+	</div>
+</div>
+<div class="col-md-4">
+	<div class="panel panel-default">
+		<!-- 如登录，显示用户信息，否则，显示登录框 -->
+        {% include "user/usercard.html" %}
+	</div>
+</div>
+{% endblock %}

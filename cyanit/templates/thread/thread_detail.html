@@ -1,0 +1,61 @@
+<!--帖子详情页面-->
+{% extends "base.html" %}
+{% block title %}
+<title>帖子详情</title>
+{% endblock %}
+{% block content %}
+<div class="col-md-8">
+    <!--楼主-->
+    <div class="panel panel-default">
+		<div class="panel-heading">{{thread.title}}</div>
+		
+		<div class="panel-body content media">
+			<!-- 点赞 -->
+			<div class="media-left">
+				<div class="vote thread" id={{thread.id}}>
+					<button class="up {%if thread.vstatus==True %}select{% endif%}"><i class="fa fa-angle-up fa-lg"></i></button>
+					<div class="count">{{thread.vote}}</div>
+					<button class="down {%if thread.vstatus==False %}select{% endif%}"><i class="fa fa-angle-down fa-lg"></i></button>
+				</div>
+			</div>
+			<div class="media-body">
+				<p class="text-muted">
+					<span><a href="/user/{{thread.user}}">{{thread.user}}</a> • </span>
+					<span>{{thread.time}}</span>
+				</p>
+				<!-- 主题 -->
+				<p class="media-heading">
+					{{thread.content | safe}}
+				</p>
+
+			</div>
+		</div>
+		<div class="panel-footer">Powered by cyanit</div>
+	</div>
+    <!--回复-->
+	<div class="panel">
+		<div class="panel-heading">回帖</div>
+		<div class="panel-body">
+			<ul class="media-list">
+                <!--显示帖子列表-->
+				{% include "comment/comments.html" %}
+			</ul>
+		</div>
+		<div class="panel-footer">Powered by cyanit</div>
+	</div>
+	{% if user and user.role != 'mute' %}
+	<!--如果用户登录，那他可以回复-->
+	{% include "comment/comment_editor.html" %}
+	{% endif %}
+</div>
+<div class="col-md-4">
+	<div class="panel panel-default">
+		<!-- 如登录，显示用户信息，否则，显示登录框 -->
+        {% include "user/usercard.html" %}
+	</div>
+</div>
+{% if user %}
+	<!--登录才有投票权-->
+<script src="/static/js/vote.js"></script>
+{% endif %}
+{% endblock %}

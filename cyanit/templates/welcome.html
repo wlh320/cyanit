@@ -1,0 +1,40 @@
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyanit</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/welcome.css">
+    <script src="/static/js/jquery-3.1.1.min.js"></script>
+    <script src="/static/js/typed.min.js"></script>
+    <style>
+    .typed-cursor{
+        opacity: 0;
+    }
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="info">
+            <div id="info-content">
+            	<div id="type">
+            		
+            	</div>
+                <h2><a href="/index">进入</a></h2>
+				
+            </div>
+        </div>
+    </div>
+    <!-- #wrapper -->
+	<script>
+    	$("#type").typed({
+        strings: ["<h1>Welcome to Cyanit</h1>"],
+        typeSpeed: 50
+      	});
+
+    </script>
+
+</body>
+
+</html>

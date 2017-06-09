@@ -1,0 +1,40 @@
+<div class="panel" id="editor">
+    <div class="panel-heading">回复</div>
+    <div class="panel-body">
+        <form role="form" method="POST">
+            <div class="form-group">
+                <label for="name">回复内容</label>
+                <script src="{{ url_for('static', filename='ckeditor/ckeditor.js') }}"></script>
+                <textarea class="form-control ckeditor" rows="3" name="content"></textarea>
+            </div>
+            <a class="btn btn-primary pull-right" id="submit">回复</a>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+$(function() {
+    $('#submit').click(function() {
+        for (instance in CKEDITOR.instances)
+            CKEDITOR.instances[instance].updateElement();
+        $.ajax({
+            url: '/comment/{{thread.id}}',
+            data: $('form').serialize(),
+            type: 'POST',
+            dataType: 'json',
+            success: function(res) {
+                if (res.success == undefined) {
+                    alert(res.error);
+                }
+                else {
+                    alert('回复成功');
+                    location.reload();
+                }
+            },
+            error: function(error) {
+                console.log(error);
+                alert('server error');
+            }
+        });
+    });
+});
+</script>

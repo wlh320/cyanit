@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    {% block title %} {% endblock %}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="/static/js/jquery-3.1.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    {% block head %} {% endblock %}
+</head>
+
+<body id="top">
+    {% include "nav.html" %}
+    <div class="container">
+        {% block content %} {% endblock %}
+    </div>
+    <a class="fixed-btn" href="#top" title="回到顶部"><i class="fa fa-angle-up fa-lg"></i></a>
+    <a class="fixed-btn go-editor" href="#editor" title="发布新帖"><i class="fa fa-pencil fa-lg"></i></a>
+    <script>
+        $('.fixed-btn').hide();
+        $('.fixed-btn').click(function () {
+            $('html, body').animate({
+                scrollTop: $($.attr(this, 'href')).offset().top
+            }, 500);
+            return false;
+        });
+        window.onscroll = function () {
+            if (document.documentElement.scrollTop + document.body.scrollTop > 120) {
+                $(".fixed-btn").show();
+            }
+            else {
+                $(".fixed-btn").hide();
+            }
+        }
+    </script>
+</body>
+
+</html>

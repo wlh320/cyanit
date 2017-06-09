@@ -1,0 +1,55 @@
+{% if user %}
+<div class="panel-heading">我</div>
+<div class="panel-body media">
+    <div class="media-left">
+        <img width="48px" height="48px" class="img-rounded" src="../static/img/default-avatar.jpg" /></a>
+    </div>
+    <div class="media-body">
+        <ul class="list-unstyled">
+            <li style="padding-bottom:5px"><a href="/user/{{user.name}}" title="wlh">{{user.name}}</a></li>
+            <li>{{user.role_info}}</li>
+        </ul>
+    </div>
+
+</div>
+{% else %}
+<div class="panel-heading">你是游客身份，请登录</div>
+<div class="panel-body">
+    <form role="form" id="login_form">
+        <div class="form-group">
+            <div id="response"></div>
+            <label for="name">用户名</label>
+            <input type="text" class="form-control" name="username">
+            <label for="name">密码</label>
+            <input type="password" class="form-control" name="password">
+        </div>
+        <button class="btn btn-primary" type="button" id="login">登录</button>
+        <a href="/register" class="pull-right"><h4>没有账号，我要注册</h4></a>
+    </form>
+</div>
+<script type="text/javascript">
+$(function() {
+    $('#login').click(function() {
+        $.ajax({
+            url: '/login',
+            data: $('#login_form').serialize(),
+            type: 'POST',
+            dataType: 'json',
+            success: function(res) {
+                if (res.error != undefined) {
+                    $('#response').addClass('alert alert-danger');
+                    $('.alert').text(res.error);
+                }
+                else {
+                    location.reload();
+                }
+            },
+            error: function(error) {
+                $('#response').addClass('alert alert-danger');
+                $('.alert').text(error.statusText);
+            }
+        });
+    });
+});
+</script>
+{% endif %}

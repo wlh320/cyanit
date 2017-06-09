@@ -1,0 +1,25 @@
+{% for comment in comments if not comment.deleted %}
+<!-- 一个回复 -->
+<li class="media topic-list">
+    <!-- 点赞 -->
+    <div class="pull-left">
+        <div class="vote comment" id={{comment.id}}>
+            <button class="up {%if comment.vstatus==True %}select{% endif%}"><i class="fa fa-angle-up fa-lg"></i></button>
+            <div class="count">{{comment.vote}}</div>
+            <button class="down {%if comment.vstatus==False %}select{% endif%}"><i class="fa fa-angle-down fa-lg"></i></button>
+        </div>
+    </div>
+    <!-- 内容 -->
+    <div class="media-body">
+        <p class="text-muted">
+            <span><a href="/profile/{{comment.user}}">{{comment.user}}</a> • </span>
+            <span>{{comment.time}}</span>
+            <span>#{{comment.floor}}</span>
+        </p>
+        <p class="media-heading">
+            {{comment.content | safe}}
+        </p>
+    </div>
+</li>
+<!-- end一个回复 -->
+{% endfor %}

@@ -1,0 +1,49 @@
+{% extends "admin/dashboard.html" %} {% block managetype %}
+
+<h1 class="page-header">帖子管理</h1>
+<div class="table-responsive">
+    <table class="table table-striped" id="table">
+        <thead>
+            <tr>
+                <th>tid</th>
+                <th>标题</th>
+                <th>所属节点</th>
+                <th>用户</th>
+                <th>发帖时间</th>
+                <th>点赞数</th>
+                <th>帖子地址</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for thread in threads %}
+            <tr>
+                <td>{{thread.id}}</td>
+                <td>{{thread.title}}</td>
+                <td>{{thread.node}}</td>
+                <td>{{thread.user}}</td>
+                <td>{{thread.time}}</td>
+                <td>{{thread.vote}}</td>
+                <td><a href="/thread/{{thread.id}}">跳转</a></td>
+                {% if not thread.deleted %}
+                <td>正常</td>
+                <td><a class="label label-danger delete" id="{{thread.id}}">删除</a></td>
+                {% else %}
+                <td>已删除</td>
+                <td><a class="label label-warning recover" id="{{thread.id}}">恢复</a></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <script src="/static/js/admin.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable();
+        });
+        // 初始化刪除按钮
+        init_btn('/thread/delete', '帖子');
+    </script>
+</div>
+{% endblock %}

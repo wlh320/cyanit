@@ -1,0 +1,22 @@
+{% extends "base.html" %} {% block title %} 
+<title>后台管理</title> {% endblock %} 
+{% block head%}
+<link rel="stylesheet" href="/static/css/dashboard.css">
+<link rel="stylesheet" type="text/css" href="/static/DataTables/datatables.min.css"/>
+<script type="text/javascript" src="/static/DataTables/datatables.min.js"></script>
+<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/css/style.css">
+{% endblock%} {% block content %}
+<div class="row">
+  {% include "admin/sidebar.html" %}
+  <div class="col-md-10 panel panel-default">
+    <div class="panel-body"> 
+    {% block managetype %} {% endblock %}
+    </div>
+    <div class="panel-footer">
+      powered by cyanit
+    </div>
+  </div>
+</div>
+
+{% endblock %}

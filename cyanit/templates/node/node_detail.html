@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}
+<title>{% if user%} {{user.name}}, {% endif %}欢迎来到Cyanit</title>
+{% endblock %}
+{% block content %}
+<div class="col-md-8">
+	<div class="panel">
+        <div class="panel-heading">
+			<a href="/node">所有板块</a> / 
+			<a href="/node/{{thisnode.name}}">{{thisnode.name}}</a></div>
+		<div class="panel-body">
+			<ul class="media-list">
+                <!--显示帖子列表-->
+				{% include "thread/threads.html" %}
+			</ul>
+		</div>
+		<div class="panel-footer">Powered by cyanit</div>
+	</div>
+	{% if user and user.role != 'mute' %}
+	<!--如果用户登录，那他可以发帖-->
+	{% include "thread/thread_editor.html" %}
+	{% endif %}
+</div>
+<div class="col-md-4">
+	<div class="panel panel-default">
+		<!-- 如登录，显示用户信息，否则，显示登录框 -->
+        {% include "user/usercard.html" %}
+	</div>
+</div>
+{% if user %}
+	<!--登录才有投票权-->
+<script src="/static/js/vote.js"></script>
+{% endif %}
+
+{% endblock %}

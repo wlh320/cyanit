@@ -1,0 +1,23 @@
+{% for thread in threads if not thread.deleted %}
+<!-- 一个帖子 -->
+<li class="media topic-list">
+    <!-- 点赞 -->
+    <div class="pull-left">
+        <div class="vote thread" id={{thread.id}}>
+            <button class="up {%if thread.vstatus==True %}select{% endif%}"><i class="fa fa-angle-up fa-lg"></i></button>
+            <div class="count">{{thread.vote}}</div>
+            <button class="down {%if thread.vstatus==False %}select{% endif%}"><i class="fa fa-angle-down fa-lg"></i></button>
+        </div>
+    </div>
+    <!-- 主题 -->
+    <div class="media-body">
+        <h3 class="media-heading topic-list-heading"><a href="/thread/{{thread.id}}">{{thread.title}}</a></h3>
+        <p class="text-muted">
+            <span><a href="/node/{{thread.node}}">{{thread.node}}</a> • </span>
+            <span><a href="/user/{{thread.user}}">{{thread.user}}</a> • </span>
+            <span>{{thread.time}}</span>
+        </p>
+    </div>
+</li>
+<!-- end一个帖子 -->
+{% endfor %}

@@ -1,0 +1,46 @@
+{% extends "admin/dashboard.html" %} {% block managetype %}
+
+<h1 class="page-header">回复管理</h1>
+<div class="table-responsive">
+    <table class="table table-striped" id="table">
+        <thead>
+            <tr>
+                <th>cid</th>
+                <th>用户</th>
+                <th>所属帖子</th>
+                <th>楼层数</th>
+                <th>回复时间</th>
+                <th>点赞数</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for comment in comments %}
+            <tr>
+                <td>{{comment.id}}</td>
+                <td>{{comment.user}}</td>
+                <td><a href="/thread/{{comment.tid}}">跳转</a></td>
+                <td>{{comment.floor}}</td>
+                <td>{{comment.time}}</td>
+                <td>{{comment.vote}}</td>
+                {% if not comment.deleted %}
+                <td>正常</td>
+                <td><a class="label label-danger delete" id="{{comment.id}}">删除</a></td>
+                {% else %}
+                <td>已删除</td>
+                <td><a class="label label-warning recover" id="{{comment.id}}">恢复</a></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <script src="/static/js/admin.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable();
+        });
+        init_btn('/comment/delete', '评论');
+    </script>
+</div>
+{% endblock %}
