@@ -7,7 +7,12 @@
 	<div class="panel">
         <div class="panel-heading">
 			<a href="/node">所有板块</a> / 
-			<a href="/node/{{thisnode.name}}">{{thisnode.name}}</a></div>
+			<a href="/node/{{thisnode.name}}">{{thisnode.name}}</a>
+			<select class="pull-right form-control" style="width:100px;">
+			    <option>按热度排序</option>
+			    <option>按时间排序</option>
+		    </select>
+		</div>
 		<div class="panel-body">
 			<ul class="media-list">
                 <!--显示帖子列表-->
@@ -22,13 +27,10 @@
 	{% endif %}
 </div>
 <div class="col-md-4">
-	<div class="panel panel-default">
-		<!-- 如登录，显示用户信息，否则，显示登录框 -->
-        {% include "user/usercard.html" %}
-	</div>
+    {% include "user/usercard.html" %}
 </div>
 {% if user %}
-	<!--登录才有投票权-->
+<!--登录才有投票权-->
 <script src="/static/js/vote.js"></script>
 {% endif %}
 

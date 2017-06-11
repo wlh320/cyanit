@@ -4,7 +4,10 @@ a simple flask forum
 
 also a coarse and not round reinvented wheel XD
 
+Still under development...
+
 一个造的不是很圆的论坛的轮子
+功能和代码目前还不稳定
 
 ## Tech Stack
 

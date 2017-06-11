@@ -1,84 +1,12 @@
 # -*- coding:utf-8 -*-
 """controllers.py some useful functions"""
 from cyanit import db
-from .models import Role, User, Thread, Comment, Node, VoteThread, VoteComment
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy import func
+from .models import Role, User, Thread, Comment, Node, VoteThread, VoteComment
+
 
 ############################ 功能函数 ################################
-def get_all_nodes():
-    """获取所有的节点"""
-    nodes = Node.query.all()
-    return [node.to_dict() for node in nodes]
-
-
-def get_all_users():
-    """获取所有用户"""
-    users = User.query.all()
-    return [user.to_dict() for user in users]
-
-
-def get_all_threads():
-    """获取所有帖子"""
-    threads = Thread.query.order_by(Thread.vote.desc(), Thread.creat_time.desc()).all()
-    return [thread.to_dict() for thread in threads]
-
-
-def get_all_comments():
-    """获取所有的评论"""
-    comments = Comment.query.all()
-    return [comment.to_dict() for comment in comments]
-
-
-def get_all_threads_with_vote(uid):
-    """获取所有帖子(带投票状态)"""
-    qres = db.session.query(Thread, VoteThread.is_up).outerjoin(VoteThread, db.and_(VoteThread.uid==uid, VoteThread.tid == Thread.id)).order_by(Thread.vote.desc(), Thread.creat_time.desc()).all()
-    threads = [thread[0].to_dict() for thread in qres]
-    for (i,thread) in enumerate(threads):
-        thread["vstatus"]=qres[i][1]
-    return threads
-
-
-def get_threads_by_nid(nid):
-    """获取某个节点下的所有帖子"""
-    node = Node.query.get(nid)
-    threads = node.threads.order_by(Thread.vote.desc(), Thread.creat_time.desc())
-    return [thread.to_dict() for thread in threads]
-
-
-def get_threads_by_nid_with_vote(nid, uid):
-    """获取某个节点下的所有帖子(带投票状态)"""
-    qres = db.session.query(Thread, VoteThread.is_up).filter(Thread.nid == nid).outerjoin(VoteThread, db.and_(VoteThread.uid==uid, VoteThread.tid == Thread.id)).order_by(Thread.vote.desc(), Thread.creat_time.desc())
-    threads = [thread[0].to_dict() for thread in qres]
-    for (i,thread) in enumerate(threads):
-        thread["vstatus"]=qres[i][1]
-    return threads
-
-
-def get_thread_by_tid(tid):
-    """获取某个帖子的详细内容"""
-    thread = Thread.query.get(tid)
-    if not thread:
-        return None
-    res = thread.to_dict()
-    res['content'] = thread.content;
-    return res
-
-
-def get_comments_by_tid(tid):
-    """获取某个帖子的评论"""
-    thread = Thread.query.get(tid)
-    comments = thread.comments
-    return [comment.to_dict() for comment in comments]
-
-
-def get_comments_by_tid_with_vote(tid, uid):
-    """获取某个帖子的评论"""
-    qres = db.session.query(Comment, VoteComment.is_up).filter(Comment.tid == tid).outerjoin(VoteComment, db.and_(VoteComment.uid==uid, VoteComment.cid == Comment.id)).order_by(Comment.vote.desc(), Comment.floor)
-    comments =  [comment[0].to_dict() for comment in qres]
-    for (i, comment) in enumerate(comments):
-        comment["vstatus"]=qres[i][1]
-    return comments
-
 
 def filter_deleted(datalist):
     """过滤掉被删除的东西"""
@@ -246,4 +174,12 @@ def mute_user(uid):
         user.rid = Role.ROLE_MUTE
     db.session.commit()
     return {'success':'success'}
-    
+
+
+def get_info():
+    people = db.session.query(func.count(User.id)).scalar()
+    thread = db.session.query(func.count(Thread.id)).scalar()
+    comment = db.session.query(func.count(Comment.id)).scalar()
+    vote = db.session.query(func.count('*')).select_from(VoteComment).scalar() + \
+           db.session.query(func.count('*')).select_from(VoteThread).scalar()
+    return {'people':people, 'thread':thread, 'comment':comment, 'vote':vote}

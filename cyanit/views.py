@@ -1,18 +1,22 @@
 # -*- coding:utf-8 -*-
 """views.py  page views"""
-from flask import render_template, json, session, redirect, request, abort
-from cyanit import app, db
 from functools import wraps
+from flask import render_template, json, session, redirect, request, abort
+from cyanit import app
+from sqlalchemy import func
+from .models import Role, User, Thread, Comment, Node, VoteThread, VoteComment
 from .controllers import *
 
+PER_PAGE = 6
 
-def admin_required(f):
+def admin_required(func):
     """需要管理员权限"""
-    @wraps(f)
+    @wraps(func)
     def decorator(*args, **kwargs):
+        """admin required decorator"""
         user = session.get('user')
-        if user and user.get('role')=='admin':
-            return f(*args, **kwargs)
+        if user and user.get('role') == 'admin':
+            return func(*args, **kwargs)
         else:
             abort(403)
     return decorator
@@ -41,20 +45,21 @@ def welcome():
 @app.route('/index')
 def index():
     """主页"""
+    page = request.args.get('p', default=1, type=int)
     user = session.get('user')
-    nodes = get_all_nodes()
-    # nodes = filter_deleted(nodes)
+    nodes = Node.query.all()
+    info = get_info()
 
     if user:
         # 用户身份，可能发送post用来发帖
-        threads = get_all_threads_with_vote(user.get('id'))
+        uid = user['id']
+        threads = db.session.query(Thread, VoteThread.is_up).outerjoin(VoteThread, db.and_(VoteThread.uid==uid, VoteThread.tid == Thread.id)).filter(Thread.deleted==False).order_by(Thread.vote.desc(), Thread.creat_time.desc()).paginate(page, PER_PAGE, False)
         # threads = filter_deleted(threads)
-        return render_template("index.html", threads=threads, user=user, nodes=nodes)
+        return render_template("index.html", threads=threads, user=user, nodes=nodes, info=info)
     else:
-        threads = get_all_threads()
-        # threads = filter_deleted(threads)
         # 游客身份，可能发送post用来登录
-        return render_template("index.html", threads=threads)
+        threads = Thread.query.order_by(Thread.vote.desc(), Thread.creat_time.desc()).filter_by(deleted=False).paginate(page, PER_PAGE, False)
+        return render_template("index.html", threads=threads, info=info)
 
 
 @app.route('/admin/<mtype>')
@@ -63,16 +68,16 @@ def manage_page(mtype):
     """后台管理页面"""
     user = session.get('user')
     if mtype == "thread":
-        threads = get_all_threads()
+        threads = Thread.query.all()
         return render_template("admin/manage-%s.html" % mtype, user=user, threads=threads)
     elif mtype == "user":
-        users = get_all_users()
+        users = User.query.all()
         return render_template("admin/manage-%s.html" % mtype, user=user, users=users)
     elif mtype == "node":
-        nodes = get_all_nodes()
+        nodes = Node.query.all()
         return render_template("admin/manage-%s.html" % mtype, user=user, nodes=nodes)
     elif mtype == "comment":
-        comments = get_all_comments()
+        comments = Comment.query.all()
         return render_template("admin/manage-%s.html" % mtype, user=user, comments=comments)
     else:
         abort(404)
@@ -129,30 +134,32 @@ def logout():
 def show_all_node():
     """显示所有的节点"""
     user = session.get('user')
-    nodes = get_all_nodes()
-    # nodes = filter_deleted(nodes)
+    nodes = Node.query.filter_by(deleted=False).all()
     return render_template("node/show_node.html", user=user, nodes=nodes)
 
 
 @app.route('/node/<name>')
 def show_node_thread(name):
     """只显示某个节点的帖子"""
+    page = request.args.get('p', default=1, type=int)
     user = session.get('user')
-    nodes = get_all_nodes()
-    thisnode = {}
-    for node in nodes:
-        if node['name'] == name:
-            thisnode = node
-    if not thisnode or thisnode.get('deleted'):
+    nodes = Node.query.all()
+    # find current node
+    thisnode = next((node for node in nodes if node.name == name), None)
+    if not thisnode or thisnode.deleted:
         abort(404)
 
     if user:
         # 用户身份，可能发送post用来发帖
-        threads = get_threads_by_nid_with_vote(thisnode['id'], user["id"])
-        return render_template("node/node_detail.html", threads=threads, user=user, nodes=nodes, thisnode=thisnode)
+        uid, nid = user['id'], thisnode.id
+        threads = threads = db.session.query(Thread, VoteThread.is_up).filter(db.and_(Thread.nid == nid, Thread.deleted == False)).outerjoin(VoteThread, db.and_(VoteThread.uid==uid, VoteThread.tid == Thread.id)).order_by(Thread.vote.desc(), Thread.creat_time.desc()).paginate(page, PER_PAGE, False)
+
+        return render_template("node/node_detail.html", threads=threads, user=user, nodes=nodes,
+                               thisnode=thisnode)
     else:
         # 游客身份，可能发送post用来登录
-        threads = get_threads_by_nid(thisnode['id'])
+        node = Node.query.get(thisnode.id)
+        threads = node.threads.filter(Thread.deleted==False).order_by(Thread.vote.desc(), Thread.creat_time.desc()).paginate(page, PER_PAGE, False)
         return render_template("node/node_detail.html", threads=threads, thisnode=thisnode)
 
 
@@ -198,19 +205,23 @@ def api_post_thread():
 @app.route('/thread/<int:tid>')
 def thread_detail(tid):
     """帖子页"""
+    page = request.args.get('p', default=1, type=int)
     user = session.get('user')
-    thread = get_thread_by_tid(tid)
-    if not thread or thread.get('deleted'):
-        return render_template('404.html'), 404
+    thread = Thread.query.get(tid)
+    if not thread or thread.deleted:
+        abort(404)
 
     if user: # 登录后增加用户的投票记录
+        uid = user['id']
+        comments = db.session.query(Comment, VoteComment.is_up).filter(db.and_(Comment.tid == tid, Comment.deleted == False)).outerjoin(VoteComment, db.and_(VoteComment.uid==uid, VoteComment.cid == Comment.id)).order_by(Comment.vote.desc(), Comment.floor).paginate(page, PER_PAGE, False)
         vote_status = VoteThread.query.filter_by(tid=tid, uid=user['id']).first()
-        if vote_status:
-            thread['vstatus'] = vote_status.is_up
-        comments = get_comments_by_tid_with_vote(tid, user['id'])
+        tstatus = vote_status.is_up if vote_status else None
+
     else:
-        comments = get_comments_by_tid(tid)
-    return render_template("thread/thread_detail.html", user=user, comments=comments, thread=thread)
+        comments = thread.comments.filter(Comment.deleted==False).paginate(page, PER_PAGE, False)
+        tstatus = None
+
+    return render_template("thread/thread_detail.html", user=user, comments=comments, thread=thread, tstatus=tstatus)
 
 
 #example: /thread/vote/2?action=down

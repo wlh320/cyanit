@@ -17,7 +17,7 @@
                 <td>{{muser.id}}</td>
                 <td>{{muser.name}}</td>
                 <td>{{muser.email}}</td>
-                {% if muser.role == 'user' %}
+                {% if muser.role.name == 'user' %}
                 <td>普通用户</td>
                 <td><a class="label label-danger delete" id="{{muser.id}}">禁言</a></td>
                 {% else %}

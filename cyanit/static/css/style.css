@@ -19,6 +19,7 @@ h6{font-size:12px}
 .panel-heading {
     border-bottom: 1px solid #eee;
     font-size: 18px;
+    padding: 6px 15px;
 }
 .panel-body {
 	word-wrap: break-word; 
@@ -101,5 +102,12 @@ h6{font-size:12px}
 .go-editor {
     right:160px;
     bottom:30px;
+}
+.pagination {
+    margin: 10px;
+    margin-bottom: 0;
+}
+.media-list {
+    margin-bottom: 0;
 }
 

@@ -13,14 +13,14 @@
 			<!-- 点赞 -->
 			<div class="media-left">
 				<div class="vote thread" id={{thread.id}}>
-					<button class="up {%if thread.vstatus==True %}select{% endif%}"><i class="fa fa-angle-up fa-lg"></i></button>
+					<button class="up {%if tstatus==True %}select{% endif%}"><i class="fa fa-angle-up fa-lg"></i></button>
 					<div class="count">{{thread.vote}}</div>
-					<button class="down {%if thread.vstatus==False %}select{% endif%}"><i class="fa fa-angle-down fa-lg"></i></button>
+					<button class="down {%if tstatus==False %}select{% endif%}"><i class="fa fa-angle-down fa-lg"></i></button>
 				</div>
 			</div>
 			<div class="media-body">
 				<p class="text-muted">
-					<span><a href="/user/{{thread.user}}">{{thread.user}}</a> • </span>
+					<span><a href="/user/{{thread.user.name}}">{{thread.user.name}}</a> • </span>
 					<span>{{thread.time}}</span>
 				</p>
 				<!-- 主题 -->
@@ -49,10 +49,7 @@
 	{% endif %}
 </div>
 <div class="col-md-4">
-	<div class="panel panel-default">
-		<!-- 如登录，显示用户信息，否则，显示登录框 -->
-        {% include "user/usercard.html" %}
-	</div>
+    {% include "user/usercard.html" %}
 </div>
 {% if user %}
 	<!--登录才有投票权-->

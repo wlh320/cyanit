@@ -21,9 +21,9 @@
             <tr>
                 <td>{{thread.id}}</td>
                 <td>{{thread.title}}</td>
-                <td>{{thread.node}}</td>
-                <td>{{thread.user}}</td>
-                <td>{{thread.time}}</td>
+                <td>{{thread.node.name}}</td>
+                <td>{{thread.user.name}}</td>
+                <td>{{thread.creat_time}}</td>
                 <td>{{thread.vote}}</td>
                 <td><a href="/thread/{{thread.id}}">跳转</a></td>
                 {% if not thread.deleted %}

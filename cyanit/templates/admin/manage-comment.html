@@ -19,10 +19,10 @@
             {% for comment in comments %}
             <tr>
                 <td>{{comment.id}}</td>
-                <td>{{comment.user}}</td>
+                <td>{{comment.user.name}}</td>
                 <td><a href="/thread/{{comment.tid}}">跳转</a></td>
                 <td>{{comment.floor}}</td>
-                <td>{{comment.time}}</td>
+                <td>{{comment.creat_time}}</td>
                 <td>{{comment.vote}}</td>
                 {% if not comment.deleted %}
                 <td>正常</td>

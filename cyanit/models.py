@@ -22,7 +22,7 @@ class User(db.Model):
         self.rid = Role.ROLE_USER
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<User %r>' % self.name
     
     def to_dict(self):
         return {'id':self.id, 'name':self.name, 'email':self.email, 

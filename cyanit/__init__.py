@@ -13,6 +13,8 @@ app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'Flask please keep this secret for me'
 
+app.config['PER_PAGE'] = 100
+
 db = SQLAlchemy(app)
 db.init_app(app)
 

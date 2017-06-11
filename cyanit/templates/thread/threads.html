@@ -1,23 +1,31 @@
-{% for thread in threads if not thread.deleted %}
+{% for t in threads.items %}
+{% if t is not iterable %}
+{% set thread = t %}
+{% else %}
+{% set thread = t[0] %}
+{% set status = t[1] %}
+{% endif %}
 <!-- 一个帖子 -->
 <li class="media topic-list">
     <!-- 点赞 -->
     <div class="pull-left">
         <div class="vote thread" id={{thread.id}}>
-            <button class="up {%if thread.vstatus==True %}select{% endif%}"><i class="fa fa-angle-up fa-lg"></i></button>
+            <button class="up {%if status==True %}select{% endif%}"><i class="fa fa-angle-up fa-lg"></i></button>
             <div class="count">{{thread.vote}}</div>
-            <button class="down {%if thread.vstatus==False %}select{% endif%}"><i class="fa fa-angle-down fa-lg"></i></button>
+            <button class="down {%if status==False %}select{% endif%}"><i class="fa fa-angle-down fa-lg"></i></button>
         </div>
     </div>
     <!-- 主题 -->
     <div class="media-body">
         <h3 class="media-heading topic-list-heading"><a href="/thread/{{thread.id}}">{{thread.title}}</a></h3>
         <p class="text-muted">
-            <span><a href="/node/{{thread.node}}">{{thread.node}}</a> • </span>
-            <span><a href="/user/{{thread.user}}">{{thread.user}}</a> • </span>
-            <span>{{thread.time}}</span>
+            <span><a href="/node/{{thread.node.name}}">{{thread.node.name}}</a> • </span>
+            <span><a href="/user/{{thread.user.name}}">{{thread.user.name}}</a> • </span>
+            <span>{{thread.creat_time}}</span>
         </p>
     </div>
 </li>
 <!-- end一个帖子 -->
 {% endfor %}
+{% import "macro.html" as macro %}
+{{ macro.pager(request.path, threads.total, threads.per_page, threads.page)}}
