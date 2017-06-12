@@ -8,12 +8,6 @@ from .models import Role, User, Thread, Comment, Node, VoteThread, VoteComment
 
 ############################ 功能函数 ################################
 
-def filter_deleted(datalist):
-    """过滤掉被删除的东西"""
-    filtered = filter(lambda d: d['deleted'] is False, datalist)
-    return [item for item in filtered]
-
-
 def do_register(username, email, password, p_confirm):
     """注册"""
     # 信息不全
@@ -157,6 +151,8 @@ def delete_comment(cid):
 
 def add_node(name, desc):
     """管理员添加节点"""
+    if not name and desc:
+        return {'error':'不能为空'}
     node = Node(name, desc)
     db.session.add(node)
     db.session.commit()

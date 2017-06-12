@@ -13,7 +13,7 @@
                     {% if thisnode %}
                         <option value="{{thisnode.id}}">{{thisnode.name}}</option>
                     {% else %}
-                        {% for node in nodes %}
+                        {% for node in nodes if not node.deleted %}
                         <option value="{{node.id}}">{{node.name}}</option>
                         {% endfor %}
                     {% endif %}

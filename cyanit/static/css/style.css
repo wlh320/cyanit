@@ -3,6 +3,7 @@ body{
 	background: url(../img/bg.jpg) 100% 100% /cover;
 	font-family: sans-serif;
 	font-size: 14px;
+    /*color: #000;*/
 }
 
 html {
@@ -16,10 +17,11 @@ h4{font-size:16px}
 h5{font-size:14px}
 h6{font-size:12px}
 
+
 .panel-heading {
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #e2e2e2;
     font-size: 18px;
-    padding: 6px 15px;
+    padding: 2px 15px;
 }
 .panel-body {
 	word-wrap: break-word; 
@@ -27,7 +29,7 @@ h6{font-size:12px}
 }
 
 .topic-list-heading {
-    margin: 10px 0 0 0;
+    margin: 8px 0 4px 0;
 }
 
 .topic-list-heading a{
@@ -36,7 +38,7 @@ h6{font-size:12px}
     padding-bottom: 10px
 }
 .topic-list{
-	border-bottom: 2px solid #eee;
+	border-bottom: 1px solid #e2e2e2;
 	padding-bottom: 2px;
 }
 .media {
@@ -44,8 +46,9 @@ h6{font-size:12px}
     margin-bottom: 5px;
 }
 .text-muted {
-    padding-top: 10px;
+    padding-top: 5px;
     margin-bottom: 0px;
+    color: #999999;
 }
 .vote {
     text-align: center;
@@ -74,6 +77,7 @@ h6{font-size:12px}
 .navbar {
     background: #ffffff;
     min-height: 40px;
+    box-shadow: 0px 0px 15px #555;
 }
 .navbar-nav>li>a {
     padding-top: 10px;

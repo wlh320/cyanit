@@ -18,6 +18,7 @@
     <!-- 主题 -->
     <div class="media-body">
         <h3 class="media-heading topic-list-heading"><a href="/thread/{{thread.id}}">{{thread.title}}</a></h3>
+        <span class="pull-right" title="评论数"><i class="fa fa-comment"></i>  {{thread.comments.count()}}</span>
         <p class="text-muted">
             <span><a href="/node/{{thread.node.name}}">{{thread.node.name}}</a> • </span>
             <span><a href="/user/{{thread.user.name}}">{{thread.user.name}}</a> • </span>
@@ -27,5 +28,8 @@
 </li>
 <!-- end一个帖子 -->
 {% endfor %}
+{% if not threads.items %}
+空空如也 _(:3 」∠)_
+{% endif%}
 {% import "macro.html" as macro %}
 {{ macro.pager(request.path, threads.total, threads.per_page, threads.page)}}

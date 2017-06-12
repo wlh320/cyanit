@@ -81,7 +81,7 @@ Frontend : jQuery Bootstrap font-awesome Datatables ckeditor
 - add more features to make it more powerful
   - private messages
   - unread threads/comments alert
-  - sort threads/comments not only by votes
+  - ~~sort threads/comments not only by votes~~ sort threads/comments by both vote and time with their own weight
   - @  someone
 
 - learn from existing projects to make my code more pythonic

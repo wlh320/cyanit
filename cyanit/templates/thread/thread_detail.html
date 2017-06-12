@@ -8,7 +8,6 @@
     <!--楼主-->
     <div class="panel panel-default">
 		<div class="panel-heading">{{thread.title}}</div>
-		
 		<div class="panel-body content media">
 			<!-- 点赞 -->
 			<div class="media-left">
@@ -18,10 +17,12 @@
 					<button class="down {%if tstatus==False %}select{% endif%}"><i class="fa fa-angle-down fa-lg"></i></button>
 				</div>
 			</div>
+			
 			<div class="media-body">
 				<p class="text-muted">
 					<span><a href="/user/{{thread.user.name}}">{{thread.user.name}}</a> • </span>
-					<span>{{thread.time}}</span>
+					<span>{{thread.creat_time}}</span> • 
+					<span>发表于 <a href="/node/{{thread.node.name}}"> {{thread.node.name}} </a>板块 </span>
 				</p>
 				<!-- 主题 -->
 				<p class="media-heading">

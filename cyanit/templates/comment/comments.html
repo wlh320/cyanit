@@ -10,17 +10,18 @@
     <!-- 点赞 -->
     <div class="pull-left">
         <div class="vote comment" id={{comment.id}}>
-            <button class="up {%if cstatus==True %}select{% endif%}"><i class="fa fa-angle-up fa-lg"></i></button>
+            <button class="up {%if cstatus==True %}select{% endif %}"><i class="fa fa-angle-up fa-lg"></i></button>
             <div class="count">{{comment.vote}}</div>
-            <button class="down {%if cstatus==False %}select{% endif%}"><i class="fa fa-angle-down fa-lg"></i></button>
+            <button class="down {%if cstatus==False %}select{% endif %}"><i class="fa fa-angle-down fa-lg"></i></button>
         </div>
     </div>
     <!-- 内容 -->
     <div class="media-body">
         <p class="text-muted">
-            <span><a href="/profile/{{comment.user}}">{{comment.user.name}}</a> • </span>
+            <span><a href="/user/{{comment.user}}">{{comment.user.name}}</a> </span> •
             <span>{{comment.creat_time}}</span>
-            <span>#{{comment.floor}}</span>
+            <span class="label label-default pull-right"># {{comment.floor}}</span>
+            {% if comment.user.name == thread.user.name %} <span class="badge">楼主</span> {% endif %}
         </p>
         <p class="media-heading">
             {{comment.content | safe}}
@@ -29,5 +30,10 @@
 </li>
 <!-- end一个回复 -->
 {% endfor %}
+
+{% if not comments.items %}
+空空如也 _(:3 」∠)_
+{% endif%}
+
 {% import "macro.html" as macro %}
 {{ macro.pager(request.path, comments.total, comments.per_page, comments.page)}}

@@ -3,11 +3,10 @@
 from functools import wraps
 from flask import render_template, json, session, redirect, request, abort
 from cyanit import app
-from sqlalchemy import func
-from .models import Role, User, Thread, Comment, Node, VoteThread, VoteComment
+from .models import User, Thread, Comment, Node, VoteThread, VoteComment
 from .controllers import *
 
-PER_PAGE = 6
+PER_PAGE = 8
 
 def admin_required(func):
     """需要管理员权限"""
