@@ -12,7 +12,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for muser in users if muser.role != 'admin' %}
+            {% for muser in users if muser.role.name != 'admin' %}
             <tr>
                 <td>{{muser.id}}</td>
                 <td>{{muser.name}}</td>

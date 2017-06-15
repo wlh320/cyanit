@@ -52,12 +52,18 @@ def index():
     if user:
         # 用户身份，可能发送post用来发帖
         uid = user['id']
-        threads = db.session.query(Thread, VoteThread.is_up).outerjoin(VoteThread, db.and_(VoteThread.uid==uid, VoteThread.tid == Thread.id)).filter(Thread.deleted==False).order_by(Thread.vote.desc(), Thread.creat_time.desc()).paginate(page, PER_PAGE, False)
+        threads = (db.session.query(Thread, VoteThread.is_up)
+                             .outerjoin(VoteThread, db.and_(VoteThread.uid==uid, VoteThread.tid == Thread.id))
+                             .filter(Thread.deleted==False)
+                             .order_by(Thread.vote.desc(), Thread.creat_time.desc())
+                             .paginate(page, PER_PAGE, False))
         # threads = filter_deleted(threads)
         return render_template("index.html", threads=threads, user=user, nodes=nodes, info=info)
     else:
         # 游客身份，可能发送post用来登录
-        threads = Thread.query.order_by(Thread.vote.desc(), Thread.creat_time.desc()).filter_by(deleted=False).paginate(page, PER_PAGE, False)
+        threads = (Thread.query
+                         .order_by(Thread.vote.desc(), Thread.creat_time.desc())
+                         .filter_by(deleted=False).paginate(page, PER_PAGE, False))
         return render_template("index.html", threads=threads, info=info)
 
 
@@ -151,14 +157,20 @@ def show_node_thread(name):
     if user:
         # 用户身份，可能发送post用来发帖
         uid, nid = user['id'], thisnode.id
-        threads = threads = db.session.query(Thread, VoteThread.is_up).filter(db.and_(Thread.nid == nid, Thread.deleted == False)).outerjoin(VoteThread, db.and_(VoteThread.uid==uid, VoteThread.tid == Thread.id)).order_by(Thread.vote.desc(), Thread.creat_time.desc()).paginate(page, PER_PAGE, False)
+        threads = (db.session.query(Thread, VoteThread.is_up)
+                             .filter(db.and_(Thread.nid == nid, Thread.deleted == False))
+                             .outerjoin(VoteThread, db.and_(VoteThread.uid==uid, VoteThread.tid == Thread.id))
+                             .order_by(Thread.vote.desc(), Thread.creat_time.desc())
+                             .paginate(page, PER_PAGE, False))
 
         return render_template("node/node_detail.html", threads=threads, user=user, nodes=nodes,
                                thisnode=thisnode)
     else:
         # 游客身份，可能发送post用来登录
         node = Node.query.get(thisnode.id)
-        threads = node.threads.filter(Thread.deleted==False).order_by(Thread.vote.desc(), Thread.creat_time.desc()).paginate(page, PER_PAGE, False)
+        threads = (node.threads.filter(Thread.deleted==False)
+                               .order_by(Thread.vote.desc(), Thread.creat_time.desc())
+                               .paginate(page, PER_PAGE, False))
         return render_template("node/node_detail.html", threads=threads, thisnode=thisnode)
 
 
@@ -212,12 +224,17 @@ def thread_detail(tid):
 
     if user: # 登录后增加用户的投票记录
         uid = user['id']
-        comments = db.session.query(Comment, VoteComment.is_up).filter(db.and_(Comment.tid == tid, Comment.deleted == False)).outerjoin(VoteComment, db.and_(VoteComment.uid==uid, VoteComment.cid == Comment.id)).order_by(Comment.vote.desc(), Comment.floor).paginate(page, PER_PAGE, False)
+        comments = (db.session.query(Comment, VoteComment.is_up)
+                              .filter(db.and_(Comment.tid == tid, Comment.deleted == False))
+                              .outerjoin(VoteComment, db.and_(VoteComment.uid==uid, VoteComment.cid == Comment.id))
+                              .order_by(Comment.vote.desc(), Comment.floor)
+                              .paginate(page, PER_PAGE, False))
         vote_status = VoteThread.query.filter_by(tid=tid, uid=user['id']).first()
         tstatus = vote_status.is_up if vote_status else None
 
     else:
-        comments = thread.comments.filter(Comment.deleted==False).paginate(page, PER_PAGE, False)
+        comments = (thread.comments.filter(Comment.deleted==False)
+                                   .paginate(page, PER_PAGE, False))
         tstatus = None
 
     return render_template("thread/thread_detail.html", user=user, comments=comments, thread=thread, tstatus=tstatus)

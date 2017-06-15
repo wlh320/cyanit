@@ -4,10 +4,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cyanit</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/css/welcome.css">
+    <script src="/static/js/js.cookie.min.js"></script>
+    <script>
+        var is_skip = Cookies.get('skip');
+        if(is_skip) {window.location.replace("/index");}
+    </script>
     <script src="/static/js/jquery-3.1.1.min.js"></script>
     <script src="/static/js/typed.min.js"></script>
+    
+    <script>
+        $(function(){
+            $("#type").typed({
+                strings: ["<h1>Welcome to Cyanit</h1>"],
+                typeSpeed: 50
+            });
+        });
+    </script>
+    <!--<link rel="stylesheet" href="/static/css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="/static/css/welcome.css">
     <style>
     .typed-cursor{
         opacity: 0;
@@ -19,22 +33,12 @@
         <div id="info">
             <div id="info-content">
             	<div id="type">
-            		
             	</div>
                 <h2><a href="/index">进入</a></h2>
-				
+				<h4 style="position:fixed;right:0;bottom:0;"><a href="/index"onclick="Cookies.set('skip','1',{expires:7});">不再显示该页面</a></h4>
             </div>
         </div>
     </div>
-    <!-- #wrapper -->
-	<script>
-    	$("#type").typed({
-        strings: ["<h1>Welcome to Cyanit</h1>"],
-        typeSpeed: 50
-      	});
-
-    </script>
-
 </body>
 
 </html>

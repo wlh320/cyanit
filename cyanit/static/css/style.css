@@ -3,7 +3,10 @@ body{
 	background: url(../img/bg.jpg) 100% 100% /cover;
 	font-family: sans-serif;
 	font-size: 14px;
+	word-wrap: break-word; 
+	word-break: break-all;
     /*color: #000;*/
+    font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", "Noto Sans CJK SC","Microsoft Yahei", sans-serif;
 }
 
 html {
@@ -17,15 +20,16 @@ h4{font-size:16px}
 h5{font-size:14px}
 h6{font-size:12px}
 
-
 .panel-heading {
     border-bottom: 1px solid #e2e2e2;
     font-size: 18px;
     padding: 2px 15px;
 }
+.panel-footer {
+    padding: 2px 15px;
+}
 .panel-body {
-	word-wrap: break-word; 
-	word-break: normal; 
+    padding:10px;
 }
 
 .topic-list-heading {

@@ -30,8 +30,9 @@
 				</p>
 
 			</div>
+
 		</div>
-		<div class="panel-footer">Powered by cyanit</div>
+		<div class="panel-footer">Powered by cyanit with ❤ </div>
 	</div>
     <!--回复-->
 	<div class="panel">
@@ -42,13 +43,14 @@
 				{% include "comment/comments.html" %}
 			</ul>
 		</div>
-		<div class="panel-footer">Powered by cyanit</div>
+		<div class="panel-footer">Powered by cyanit with ❤ </div>
 	</div>
 	{% if user and user.role != 'mute' %}
 	<!--如果用户登录，那他可以回复-->
 	{% include "comment/comment_editor.html" %}
 	{% endif %}
 </div>
+<script>$('img').addClass('img-responsive');</script>
 <div class="col-md-4">
     {% include "user/usercard.html" %}
 </div>
