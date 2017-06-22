@@ -7,7 +7,7 @@
             <tr>
                 <th>cid</th>
                 <th>用户</th>
-                <th>所属帖子</th>
+                <th>所属帖子(跳转)</th>
                 <th>楼层数</th>
                 <th>回复时间</th>
                 <th>点赞数</th>
@@ -20,7 +20,7 @@
             <tr>
                 <td>{{comment.id}}</td>
                 <td>{{comment.user.name}}</td>
-                <td><a href="/thread/{{comment.tid}}">跳转</a></td>
+                <td><a href="/thread/{{comment.tid}}">{{comment.tid}}</a></td>
                 <td>{{comment.floor}}</td>
                 <td>{{comment.creat_time}}</td>
                 <td>{{comment.vote}}</td>

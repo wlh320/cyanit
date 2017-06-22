@@ -23,7 +23,7 @@ label:focus {
 /* for show */
 html, body {
     height: 100%;
-    font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", "Noto Sans CJK SC","Microsoft Yahei", sans-serif;
+    font-family: "Helvetica Neue", "Luxi Sans", "Noto Sans", Tahoma, "Hiragino Sans GB", "Noto Sans CJK SC","Microsoft Yahei", sans-serif;
 }
 
 body {

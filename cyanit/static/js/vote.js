@@ -16,7 +16,7 @@ function vote_ajax(vote_to, action, id) {
 $('.up').click(function() {
   var parent = $(this).parent();
   var id = parent.attr('id');
-  var vote_to = parent.attr('class').split(' ')[1];
+  var vote_to = parent.attr('class').split('-')[1];
   var count = $(this).next();
   var down = $(this).next().next();
   vote_ajax(vote_to, 'up', id);
@@ -37,7 +37,7 @@ $('.up').click(function() {
 $('.down').click(function() {
   var parent = $(this).parent();
   var id = parent.attr('id');
-  var vote_to = parent.attr('class').split(' ')[1];
+  var vote_to = parent.attr('class').split('-')[1];
   var count = $(this).prev();
   var up = $(this).prev().prev();
   vote_ajax(vote_to, 'down', id);

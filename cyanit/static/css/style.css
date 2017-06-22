@@ -6,7 +6,7 @@ body{
 	word-wrap: break-word; 
 	word-break: break-all;
     /*color: #000;*/
-    font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", "Noto Sans CJK SC","Microsoft Yahei", sans-serif;
+    font-family: "Helvetica Neue", "Luxi Sans", "Noto Sans", Tahoma, "Hiragino Sans GB", "Noto Sans CJK SC","Microsoft Yahei", sans-serif;
 }
 
 html {
@@ -117,5 +117,16 @@ h6{font-size:12px}
 }
 .media-list {
     margin-bottom: 0;
+}
+
+.btn-comment {
+    display: none;
+}
+.comment:hover .btn-comment{
+    display: inline-block;
+    cursor: pointer;
+}
+.alert-succes {
+    background-color: #68ff68;
 }
 

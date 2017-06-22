@@ -11,7 +11,7 @@ from .models import Role, User, Thread, Comment, Node, VoteThread, VoteComment
 def do_register(username, email, password, p_confirm):
     """注册"""
     # 信息不全
-    if not username and email and password and p_confirm:
+    if not (username and email and password and p_confirm):
         return {'error':'信息不全'}
     # 密码确认不匹配
     if password != p_confirm:
@@ -45,7 +45,7 @@ def do_login(username, password):
 
 def post_thread(uid, nid, title, content):
     """发帖"""
-    if not uid and nid and title and content:
+    if not (uid and nid and title and content):
         return {"error":"信息不全"}
 
     thread = Thread(title, uid, nid, content)
@@ -56,7 +56,7 @@ def post_thread(uid, nid, title, content):
 
 def post_comment(uid, tid, content):
     """评论"""
-    if not uid and tid and content:
+    if not (uid and tid and content):
         return {"error":"信息不全"}
     
     floor = Comment.query.filter_by(tid=tid).count()+1
@@ -151,7 +151,7 @@ def delete_comment(cid):
 
 def add_node(name, desc):
     """管理员添加节点"""
-    if not name and desc:
+    if not (name and desc):
         return {'error':'不能为空'}
     node = Node(name, desc)
     db.session.add(node)

@@ -11,7 +11,7 @@
 		<div class="panel-body content media">
 			<!-- 点赞 -->
 			<div class="media-left">
-				<div class="vote thread" id={{thread.id}}>
+				<div class="vote vote-thread" id={{thread.id}}>
 					<button class="up {%if tstatus==True %}select{% endif%}"><i class="fa fa-angle-up fa-lg"></i></button>
 					<div class="count">{{thread.vote}}</div>
 					<button class="down {%if tstatus==False %}select{% endif%}"><i class="fa fa-angle-down fa-lg"></i></button>
@@ -55,7 +55,17 @@
     {% include "user/usercard.html" %}
 </div>
 {% if user %}
-	<!--登录才有投票权-->
+<!--登录才有投票权-->
 <script src="/static/js/vote.js"></script>
+<script>
+	$('.btn-comment').on('click', function(){
+		var floor = $(this).attr('id').split('-')[1];
+		var str = '回复给 #'+floor +':\n';
+		CKEDITOR.instances.content.setData(str);
+		$('html, body').animate({
+            scrollTop: $('#editor').offset().top
+        }, 300);
+	});
+</script>
 {% endif %}
 {% endblock %}
